@@ -1262,7 +1262,7 @@
                     var cal = $(el).parents('.calendar');
                     var dt = cal.hasClass('left') ? leftCalendar.calendar[row][col] : rightCalendar.calendar[row][col];
 
-                    if ((dt.isAfter(startDate) && dt.isBefore(date)) || dt.isSame(date, 'day')) {
+                    if ((dt.isAfter(startDate) && dt.isBefore(date)) ||(dt.isBefore(startDate) && dt.isAfter(date)) || dt.isSame(date, 'day')) {
                         $(el).addClass('in-range');
                     } else {
                         $(el).removeClass('in-range');
@@ -1305,8 +1305,15 @@
                     var second = this.timePickerSeconds ? parseInt(this.container.find('.left .secondselect').val(), 10) : 0;
                     date = date.clone().hour(hour).minute(minute).second(second);
                 }
-                this.endDate = null;
-                this.setStartDate(date.clone());
+
+                // Allow bi-directional selection of dates
+                if (!this.endDate && date.isBefore(this.startDate, 'day')) {
+                    this.endDate = this.startDate;
+                    this.setStartDate(date.clone());
+                } else {
+                    this.endDate = null;
+                    this.setStartDate(date.clone());
+                }
             } else if (!this.endDate && date.isBefore(this.startDate)) {
                 //special case: clicking the same date for start/end,
                 //but the time of the end date is before the start date
