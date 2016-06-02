@@ -1230,6 +1230,10 @@
             if (this.container.find('input[name=daterangepicker_start]').is(":focus") || this.container.find('input[name=daterangepicker_end]').is(":focus"))
                 return;
 
+            // Don't update the date select values if a range has already been selected
+            if (this.startDate && this.endDate)
+                return;
+
             //ignore dates that can't be selected
             if (!$(e.target).hasClass('available')) return;
 
