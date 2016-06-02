@@ -1244,10 +1244,15 @@
             var cal = $(e.target).parents('.calendar');
             var date = cal.hasClass('left') ? this.leftCalendar.calendar[row][col] : this.rightCalendar.calendar[row][col];
 
-            if (this.endDate) {
-                this.container.find('input[name=daterangepicker_start]').val(date.format(this.locale.format));
+            if (this.startDate.isSame(date)) {
+                this.container.find('input[name=daterangepicker_start]').val(date.format(this.locale.format)).addClass('active');
+                this.container.find('input[name=daterangepicker_end]').val(date.format(this.locale.format)).addClass('active');
+            } else if (this.startDate.isBefore(date)) {
+                this.container.find('input[name=daterangepicker_end]').val(date.format(this.locale.format)).addClass('active');
+                this.container.find('input[name="daterangepicker_start"]').removeClass('active');
             } else {
-                this.container.find('input[name=daterangepicker_end]').val(date.format(this.locale.format));
+                this.container.find('input[name=daterangepicker_start]').val(date.format(this.locale.format)).addClass('active');
+                this.container.find('input[name="daterangepicker_end"]').removeClass('active');
             }
 
             //highlight the dates between the start date and the date being hovered as a potential end date
